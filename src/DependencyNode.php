@@ -106,4 +106,35 @@ class DependencyNode
     {
         return $this->parent;
     }
+
+    /*
+     * Recursively search the hierarchy for a parent object with the appropriate
+     * class name. By default, searches just for the (unqualified) class name _or_
+     * the unqualified classname without the string "Node".
+     *
+     * E.g. searching for "LandingPage" will find any ancestors of class
+     * "LandingPage" or "LandingPageNode"
+     */
+    public function getParentByName($name, $useShortName = true)
+    {
+        var_dump($name);
+        if ($this->getParent() === null)
+            return null;
+        else
+        {
+            // Short
+            if ($useShortName)
+            {
+                $parentShortName = (new \ReflectionClass($this->getParent()))->getShortName();
+                if ($parentShortName === $name || str_replace('Node','',$parentShortName) === $name)
+                    return $this->getParent();
+            }
+            else
+            {
+                if ($this->getParent() instanceof $name)
+                    return $this->getParent();
+            }
+            return $this->getParent()->getParentByName($name, $useShortName);
+        }
+    }
 }
