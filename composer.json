@@ -8,6 +8,7 @@
             "email": "markus.fasselt@gmail.com"
         }
     ],
+    "type": "library",
     "require": {
         "php": ">=5.3"
     },
