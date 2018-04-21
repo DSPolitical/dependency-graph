@@ -117,7 +117,6 @@ class DependencyNode
      */
     public function getParentByName($name, $useShortName = true)
     {
-        var_dump($name);
         if ($this->getParent() === null)
             return null;
         else
