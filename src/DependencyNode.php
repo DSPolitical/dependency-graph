@@ -23,8 +23,6 @@ class DependencyNode
      */
     private $dependencies = array();
 
-    protected $parent;
-
     /**
      * Create a new node for the dependency graph. The passed element can be an object or primitive,
      * it doesn't matter, as the resolving is based on nodes.
@@ -38,7 +36,6 @@ class DependencyNode
     {
         $this->element = $element;
         $this->name = $name;
-        $this->parent = null;
     }
 
     /**
@@ -51,7 +48,6 @@ class DependencyNode
         if (!in_array($node, $this->dependencies)) {
             $this->dependencies[] = $node;
         }
-        $this->parent = $node;
     }
 
     /**
@@ -102,38 +98,48 @@ class DependencyNode
         return $this;
     }
 
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
     /*
-     * Recursively search the hierarchy for a parent object with the appropriate
+     * Recursively search the hierarchy for a dependency object with the appropriate
      * class name. By default, searches just for the (unqualified) class name _or_
      * the unqualified classname without the string "Node".
      *
      * E.g. searching for "LandingPage" will find any ancestors of class
      * "LandingPage" or "LandingPageNode"
      */
-    public function getParentByName($name, $useShortName = true)
+    public function getDependenciesByName($name, $useShortName = true)
     {
-        if ($this->getParent() === null)
-            return null;
-        else
+        if (count($this->dependencies) === 0)
+            return [];
+        $matches = [];
+
+        foreach ($this->dependencies as $dependency)
         {
-            // Short
             if ($useShortName)
-            {
-                $parentShortName = (new \ReflectionClass($this->getParent()))->getShortName();
-                if ($parentShortName === $name || str_replace('Node','',$parentShortName) === $name)
-                    return $this->getParent();
-            }
+                $parentName = (new \ReflectionClass($dependency))->getShortName();
             else
-            {
-                if ($this->getParent() instanceof $name)
-                    return $this->getParent();
-            }
-            return $this->getParent()->getParentByName($name, $useShortName);
+                $parentName = get_class($dependency);
+
+            if ($parentName === $name || str_replace('Node', '', $parentName) === $name)
+                $matches[] = $dependency;
+
+            $matches = array_merge($matches, $dependency->getDependenciesByName($name, $useShortName));
         }
+
+        return array_unique($matches);
+    }
+
+    public function getDepth()
+    {
+        if (count($this->dependencies) === 0)
+            return 0;
+
+        $depth = 0;
+        foreach ($this->dependencies as $dependency)
+        {
+            $dependencyDepth = $dependency->getDepth();
+            if ($dependencyDepth > $depth)
+                $depth = $dependencyDepth;
+        }
+        return $depth + 1;
     }
 }
