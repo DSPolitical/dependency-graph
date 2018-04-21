@@ -1,6 +1,6 @@
 <?php
 
-namespace Digilist\DependencyGraph;
+namespace DSPolitical\DependencyGraph;
 
 use ArrayObject;
 use SplObjectStorage;

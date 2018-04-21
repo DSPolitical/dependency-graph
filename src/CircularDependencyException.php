@@ -1,6 +1,6 @@
 <?php
 
-namespace Digilist\DependencyGraph;
+namespace DSPolitical\DependencyGraph;
 
 class CircularDependencyException extends \Exception
 {

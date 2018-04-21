@@ -1,6 +1,6 @@
 <?php
 
-namespace Digilist\DependencyGraph;
+namespace DSPolitical\DependencyGraph;
 
 /**
  * This class describes a node in a dependency graph.

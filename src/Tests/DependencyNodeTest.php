@@ -1,8 +1,8 @@
 <?php
 
-namespace Digilist\DependencyGraph\Tests;
+namespace DSPolitical\DependencyGraph\Tests;
 
-use Digilist\DependencyGraph\DependencyNode;
+use DSPolitical\DependencyGraph\DependencyNode;
 
 class DependencyNodeTest extends \PHPUnit_Framework_TestCase
 {
