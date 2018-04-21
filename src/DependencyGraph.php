@@ -119,7 +119,7 @@ class DependencyGraph
         }
 
         $resolvedElements = array_map(function (DependencyNode $node) {
-            return $node->getElement();
+            return $node;
         }, $resolved->getArrayCopy());
 
         return $resolvedElements;

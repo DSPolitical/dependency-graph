@@ -23,6 +23,8 @@ class DependencyNode
      */
     private $dependencies = array();
 
+    protected $parent;
+
     /**
      * Create a new node for the dependency graph. The passed element can be an object or primitive,
      * it doesn't matter, as the resolving is based on nodes.
@@ -36,6 +38,7 @@ class DependencyNode
     {
         $this->element = $element;
         $this->name = $name;
+        $this->parent = null;
     }
 
     /**
@@ -48,6 +51,7 @@ class DependencyNode
         if (!in_array($node, $this->dependencies)) {
             $this->dependencies[] = $node;
         }
+        $this->parent = $node;
     }
 
     /**
@@ -96,5 +100,10 @@ class DependencyNode
         $this->element = $element;
 
         return $this;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
     }
 }
