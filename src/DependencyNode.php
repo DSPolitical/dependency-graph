@@ -18,6 +18,8 @@ class DependencyNode
      */
     private $element;
 
+    private $resolved;
+
     /**
      * @var array
      */
@@ -34,10 +36,11 @@ class DependencyNode
      * @param string $name
      * @param mixed $element
      */
-    public function __construct($element = null, $name = null)
+    public function __construct($element = null, $name = null, $resolved = false)
     {
         $this->element = $element;
         $this->name = $name;
+        $this->resolved = $resolved;
         $this->guid = $this->generateGUID();
     }
 
@@ -159,5 +162,15 @@ class DependencyNode
     public function getGUID()
     {
         return $this->guid;
+    }
+
+    public function markResolved()
+    {
+        $this->resolved = true;
+    }
+
+    public function isResolved()
+    {
+        return $this->resolved;
     }
 }
