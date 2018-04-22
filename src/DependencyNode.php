@@ -23,6 +23,8 @@ class DependencyNode
      */
     private $dependencies = array();
 
+    private $guid;
+
     /**
      * Create a new node for the dependency graph. The passed element can be an object or primitive,
      * it doesn't matter, as the resolving is based on nodes.
@@ -36,6 +38,7 @@ class DependencyNode
     {
         $this->element = $element;
         $this->name = $name;
+        $this->guid = $this->generateGUID();
     }
 
     /**
@@ -141,5 +144,20 @@ class DependencyNode
                 $depth = $dependencyDepth;
         }
         return $depth + 1;
+    }
+
+    private function generateGUID()
+    {
+        if (function_exists('com_create_guid') === true)
+        {
+            return trim(com_create_guid(), '{}');
+        }
+
+        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    }
+
+    public function getGUID()
+    {
+        return $this->guid;
     }
 }
