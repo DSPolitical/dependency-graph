@@ -131,7 +131,12 @@ class DependencyNode
             $matches = array_merge($matches, $dependency->getDependenciesByName($name, $useShortName));
         }
 
-        return array_unique($matches);
+        $uniques = [];
+        foreach ($matches as $match)
+        {
+            $uniques[$match->getGUID()] = $match;
+        }
+        return array_values($uniques);
     }
 
     public function getDepth()
